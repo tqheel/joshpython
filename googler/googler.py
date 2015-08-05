@@ -1,3 +1,5 @@
+#use python 2.7
+
 import time
 import urllib
 import mechanize
@@ -9,7 +11,7 @@ br.set_handle_robots(False)
 br.addheaders=[('User-agent','chrome')]
 
 term = "Blade Runner".replace(" ","+")
-query = "https://www.google.com/search?num=5&q="+term
+query = "http://www.google.com/search?num=5&q="+term+"&ie=UTF-8"
 
 htmltext = br.open(query).read()
 
@@ -17,19 +19,23 @@ htmltext = br.open(query).read()
 
 soup = BeautifulSoup(htmltext)
 
-search = soup.findAll('div',attrs={'id':'search'})
+search = soup.findAll('div',attrs={'id':'ires'})
 
 searchtext = str(search[0])
 
 soup1 = BeautifulSoup(searchtext)
-list_items = soup1.findAll('li')
-regex = "q(?!.*q).*?&amp"
-pattern = re.compile(regex)
+list_items = soup1.findAll('h3')
+#regex = "q(?!.*q).*?&amp"
+#pattern = re.compile(regex)
 
-for li in list_items:
-	soup2 = BeautifulSoup(str(li))
+for h3 in list_items:
+	soup2 = BeautifulSoup(str(h3))
 	links = soup2.findAll('a')	
-	source_link = links[0]
-	source_url = re.findall(pattern, str(source_link))
-	if len(source_url)>0:
-		print source_url[0].replace("q=","").replace("&amp","")
+	#source_link = links[0]
+	#print source_link
+	#source_url = re.findall(pattern, str(source_link))
+	if len(links)>0:
+		i = 0
+		while i < len(links):
+			print links[i] #.replace("q=","").replace("&amp","")
+			i = i +1
